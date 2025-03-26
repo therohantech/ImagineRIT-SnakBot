@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Barista</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: white;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        button {
+            background-color: orange;
+            color: black;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        #status {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Your Drink or Snack</h1>
+        <img src="robot_icon.png" alt="Robot Icon" width="100">
+        <br>
+        <button onclick="placeOrder('Popcorn')">Popcorn</button>
+        <button onclick="placeOrder('Coffee')">Coffee</button>
+        <p id="status">Waiting for order...</p>
+    </div>
+
+    <script>
+        function placeOrder(item) {
+            document.getElementById('status').innerText = item + ' ordered! Preparing...';
+            fetch('/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order: item })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').innerText = item + ' is ready!';
+            })
+            .catch(error => {
+                document.getElementById('status').innerText = 'Error placing order';
+            });
+        }
+    </script>
+</body>
+</html>
